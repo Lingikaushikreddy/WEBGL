@@ -7,12 +7,14 @@ interface GameState {
     inventory: string[];
     activeQuest: string | null;
     currentDialogue: string | null; // ID of the current dialogue node
+    interactionPrompt: string | null; // "Press Space to..."
 
     // Actions
     setPhase: (phase: GamePhase) => void;
     collectItem: (item: string) => void;
     startQuest: (quest: string) => void;
     setDialogue: (id: string | null) => void;
+    setInteractionPrompt: (prompt: string | null) => void;
 }
 
 export const useGameStore = create<GameState>((set) => ({
@@ -20,6 +22,7 @@ export const useGameStore = create<GameState>((set) => ({
     inventory: [],
     activeQuest: 'Find the Guide Bot',
     currentDialogue: 'intro',
+    interactionPrompt: null,
 
     setPhase: (phase) => set({ phase }),
     collectItem: (item) => set((state) => {
@@ -28,4 +31,5 @@ export const useGameStore = create<GameState>((set) => ({
     }),
     startQuest: (quest) => set({ activeQuest: quest }),
     setDialogue: (id) => set({ currentDialogue: id }),
+    setInteractionPrompt: (prompt) => set({ interactionPrompt: prompt }),
 }));

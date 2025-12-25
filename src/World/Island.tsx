@@ -1,10 +1,8 @@
-import { useGameStore } from '../Game/GameManager';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
+import { POI_LOCATIONS } from '../Game/Constants';
 
 export const Island = () => {
-    const setDialogue = useGameStore((state) => state.setDialogue);
-
     // Load textures
     const textures = useTexture({
         map: '/assets/mjkv01j3.png',
@@ -15,49 +13,57 @@ export const Island = () => {
     return (
         <group>
             {/* 360 Skybox Simulation */}
-            <mesh scale={[100, 100, 100]}>
+            <mesh scale={[200, 200, 200]}>
                 <sphereGeometry />
                 <meshBasicMaterial map={textures.sky} side={THREE.BackSide} />
             </mesh>
 
             {/* Main Ground */}
             <mesh rotation-x={-Math.PI / 2} receiveShadow>
-                <circleGeometry args={[20, 32]} />
-                <meshStandardMaterial color="#1a1a1a" roughness={0.2} metalness={0.8} />
+                <planeGeometry args={[200, 200]} />
+                <meshStandardMaterial color="#1a1a1a" roughness={0.8} metalness={0.2} />
+            </mesh>
+
+            {/* Road Track */}
+            <mesh rotation-x={-Math.PI / 2} position={[0, 0.05, 0]} receiveShadow>
+                <ringGeometry args={[35, 55, 64]} />
+                <meshStandardMaterial color="#333333" roughness={0.5} />
             </mesh>
 
             {/* Decorative Grid */}
-            <gridHelper args={[50, 50, 0x00ff88, 0x4a4a4a]} position={[0, 0.01, 0]} />
+            <gridHelper args={[200, 50, 0x00ff88, 0x222222]} position={[0, 0.02, 0]} />
 
             {/* Projects Zone - Core Terminal */}
-            <group position={[5, 2, 0]} rotation={[0, -Math.PI / 4, 0]}>
-                <mesh
-                    onClick={(e) => { e.stopPropagation(); setDialogue('project_zone'); }}
-                    onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
-                    onPointerOut={() => { document.body.style.cursor = 'auto'; }}
-                >
-                    <planeGeometry args={[4, 3]} />
+            <group position={POI_LOCATIONS.PROJECTS.toArray()} rotation={[0, -Math.PI / 4, 0]}>
+                <mesh position={[0, 2, 0]}>
+                    <planeGeometry args={[8, 5]} />
                     <meshBasicMaterial map={textures.map} side={THREE.DoubleSide} />
                 </mesh>
-                <mesh position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-                    <cylinderGeometry args={[2, 2, 1, 32]} />
+                <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                    <cylinderGeometry args={[3, 3, 0.5, 32]} />
                     <meshStandardMaterial color="cyan" wireframe />
+                </mesh>
+                {/* Visual Marker */}
+                <mesh position={[0, 6, 0]}>
+                     <octahedronGeometry args={[1]} />
+                     <meshStandardMaterial color="cyan" emissive="cyan" emissiveIntensity={2} />
                 </mesh>
             </group>
 
             {/* Skills Zone - Holo Display */}
-            <group position={[-5, 2, 0]} rotation={[0, Math.PI / 4, 0]}>
-                <mesh
-                    onClick={(e) => { e.stopPropagation(); setDialogue('skill_zone'); }}
-                    onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
-                    onPointerOut={() => { document.body.style.cursor = 'auto'; }}
-                >
-                    <planeGeometry args={[3, 4]} />
+            <group position={POI_LOCATIONS.SKILLS.toArray()} rotation={[0, Math.PI / 4, 0]}>
+                <mesh position={[0, 2, 0]}>
+                    <planeGeometry args={[6, 8]} />
                     <meshBasicMaterial map={textures.holo} transparent opacity={0.9} side={THREE.DoubleSide} />
                 </mesh>
-                <mesh position={[0, -2.5, 0]}>
-                    <boxGeometry args={[1, 1, 1]} />
+                <mesh position={[0, 0, 0]}>
+                    <boxGeometry args={[4, 0.5, 4]} />
                     <meshStandardMaterial color="orange" />
+                </mesh>
+                 {/* Visual Marker */}
+                 <mesh position={[0, 7, 0]}>
+                     <octahedronGeometry args={[1]} />
+                     <meshStandardMaterial color="orange" emissive="orange" emissiveIntensity={2} />
                 </mesh>
             </group>
         </group>

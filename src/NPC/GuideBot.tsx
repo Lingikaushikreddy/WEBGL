@@ -2,20 +2,17 @@ import { useRef } from 'react';
 import { Float, Text } from '@react-three/drei';
 import { useGameStore } from '../Game/GameManager';
 import { Mesh } from 'three';
+import { POI_LOCATIONS } from '../Game/Constants';
 
 export const GuideBot = () => {
     const meshRef = useRef<Mesh>(null);
     const activeQuest = useGameStore((state) => state.activeQuest);
 
-    const setDialogue = useGameStore((state) => state.setDialogue);
-
     return (
-        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5} position={[0, 2, 0]}>
+        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5} position={POI_LOCATIONS.GUIDE.toArray()}>
             <mesh
                 ref={meshRef}
-                onClick={(e) => { e.stopPropagation(); setDialogue('intro'); }}
-                onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
-                onPointerOut={() => { document.body.style.cursor = 'auto'; }}
+                castShadow
             >
                 <sphereGeometry args={[0.5, 32, 32]} />
                 <meshStandardMaterial color="#00ff88" roughness={0.2} metalness={0.8} />
