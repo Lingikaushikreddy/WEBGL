@@ -2,7 +2,7 @@ import { useGameStore } from '../Game/GameManager';
 import { DIALOGUE_DATA } from '../Game/DialogueData';
 
 export const Overlay = () => {
-    const { currentDialogue, setPhase, setDialogue } = useGameStore();
+    const { currentDialogue, interactionPrompt, setPhase, setDialogue } = useGameStore();
 
     const handleAction = (action?: string) => {
         if (action === 'start_game') {
@@ -27,6 +27,26 @@ export const Overlay = () => {
                 <h3>STATUS</h3>
                 <p>{activeNode ? 'IN CONVERSATION' : 'EXPLORING'}</p>
             </header>
+
+            {/* Interaction Prompt */}
+            {!activeNode && interactionPrompt && (
+                <div style={{
+                    position: 'absolute',
+                    bottom: '10%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    padding: '1rem 2rem',
+                    borderRadius: '2rem',
+                    color: '#fff',
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold',
+                    pointerEvents: 'none',
+                    border: '1px solid #00ff88'
+                }}>
+                    {interactionPrompt}
+                </div>
+            )}
 
             {/* Dialogue Box */}
             {activeNode && (
@@ -55,11 +75,19 @@ export const Overlay = () => {
                 </div>
             )}
 
-            {/* Inventory */}
-            <footer className="inventory ui-interactive" style={{ opacity: activeNode ? 0 : 1 }}>
-                <h3>INVENTORY</h3>
-                {/* Inventory items... */}
-            </footer>
+            {/* Controls Helper */}
+            {!activeNode && (
+                 <div style={{
+                    position: 'absolute',
+                    bottom: '2rem',
+                    right: '2rem',
+                    color: 'rgba(255,255,255,0.5)',
+                    textAlign: 'right'
+                }}>
+                    <p>WASD / Arrows to Drive</p>
+                    <p>SPACE to Interact</p>
+                </div>
+            )}
         </div>
     );
 };
